@@ -68,17 +68,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new WordListAdapter(this, md);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //llista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        //    @Override
-        //    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        //        md.deleteContact(md.getId(position+1));
-        //        updateListView();
-        //        return false;
-        //    }
-        //});
-
-
     }
 
     public void createContact(){
@@ -97,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 String num = input2.getText().toString();
                 if(!contact.equals("") && !num.equals("")) {
                     md.createRecords(String.valueOf(++count), contact, num);
-                    updateListView();
                 }
             }
         });
@@ -124,12 +112,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateListView(){
-        //Cursor c = md.selectContacts();
-        //String[] from = new String[]{"name"};
-        //int[] to = new int[]{android.R.id.text1};
-        //mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, from, to);
-        //llista.setAdapter(mAdapter);
-    }
 
 }

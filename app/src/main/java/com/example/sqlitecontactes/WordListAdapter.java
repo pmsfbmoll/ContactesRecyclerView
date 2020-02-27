@@ -35,9 +35,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     @Override
     public void onBindViewHolder(WordViewHolder holder, int position) {
-        this.c=md.selectContact(md.getId(position));
+        String id=md.getId(position);
+        this.c=md.selectContact(id);
         String mCurrent = c.getString(1);
         holder.wordItemView.setText(mCurrent);
+        holder.setId(id);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         private TextView wordItemView;
         private WordListAdapter mAdapter;
         private Boolean edited=false;
+        private String id;
         public WordViewHolder(View itemView, WordListAdapter adapter) {
             super(itemView);
             wordItemView = (TextView) itemView.findViewById(R.id.word);
@@ -62,7 +65,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         public void onClick(View v) {
             final int index = getAdapterPosition();
             Context context = v.getContext();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             LayoutInflater factory = LayoutInflater.from(context);
             final View textEntryView = factory.inflate(R.layout.info, null);
             final EditText text1 = (EditText) textEntryView.findViewById(R.id.textView4);
@@ -75,11 +78,19 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             builder.setView(textEntryView);
             edited=false;
             // Set up the buttons
+
+            builder.setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    md.deleteContact(id);
+                    mAdapter.notifyItemRemoved(Integer.valueOf(id));
+                }
+            });
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (edited){
-                        md.updateContact(md.getId(index),text1.getText().toString());
+                        md.updateContact(id,text1.getText().toString());
                     }
                     edited=false;
                 }
@@ -92,6 +103,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                 }
             });
             builder.show();
+        }
+
+        public void setId(String s){
+            this.id=s;
         }
     }
 }
